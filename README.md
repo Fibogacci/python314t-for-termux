@@ -93,32 +93,17 @@ python3.14t -c "import sys; print(f'GIL enabled: {sys._is_gil_enabled()}')"
 
 ---
 
-## Installing pip
+## Package Management - Use uv (Required)
 
-Python 3.14t does not include pip by default (to reduce package size). Install it manually:
+**⚠️ Important:** Standard `pip` does **NOT work** with this free-threading build due to ctypes library naming issues (`libpython3.14t.so` vs `libpython3.14.so`).
 
-```bash
-# Download get-pip.py
-wget https://bootstrap.pypa.io/get-pip.py
-
-# Install pip for Python 3.14t
-python3.14t get-pip.py
-
-# Verify
-python3.14t -m pip --version
-```
-
----
-
-## Using with uv (recommended)
-
-[uv](https://github.com/astral-sh/uv) is a fast Python package installer and resolver. It works great with Python 3.14t:
+**Use `uv` instead** - a fast Python package installer that works perfectly with free-threading Python:
 
 ### Install uv
 
 ```bash
-curl -LsSf https://astral.sh/uv/install.sh | sh
-source ~/.bashrc
+# Install from Termux repository
+pkg install uv
 ```
 
 ### Create a project
@@ -128,13 +113,26 @@ source ~/.bashrc
 uv init my-project --python 3.14t
 cd my-project
 
+# Add packages
+uv add requests numpy
+
 # Run Python
 uv run python --version
 # Output: Python 3.14.0 free-threading build
 
-# Add packages
-uv add requests numpy
+# Run your scripts
+uv run python script.py
 ```
+
+### Why uv?
+
+- ✅ Works with free-threading Python 3.14t (pip doesn't!)
+- ⚡ 10-100x faster than pip
+- 🔒 Reliable dependency resolution
+- 📦 Automatic virtual environment management
+- 🐍 Compatible with all Python packages
+
+Learn more: https://github.com/astral-sh/uv
 
 ---
 
