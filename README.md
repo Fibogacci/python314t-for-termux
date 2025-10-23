@@ -97,7 +97,7 @@ python3.14t -c "import sys; print(f'GIL enabled: {sys._is_gil_enabled()}')"
 
 **⚠️ Important:** Standard `pip` does **NOT work** with this free-threading build due to ctypes library naming issues (`libpython3.14t.so` vs `libpython3.14.so`).
 
-**Use `uv` instead** - a fast Python package installer that works perfectly with free-threading Python:
+**Use `uv` instead** - a fast Python package installer:
 
 ### Install uv
 
@@ -113,8 +113,8 @@ pkg install uv
 uv init my-project --python 3.14t
 cd my-project
 
-# Add packages
-uv add requests numpy
+# Add pure Python packages (recommended)
+uv add requests httpx click
 
 # Run Python
 uv run python --version
@@ -130,9 +130,26 @@ uv run python script.py
 - ⚡ 10-100x faster than pip
 - 🔒 Reliable dependency resolution
 - 📦 Automatic virtual environment management
-- 🐍 Compatible with all Python packages
 
 Learn more: https://github.com/astral-sh/uv
+
+### Package Compatibility
+
+✅ **Pure Python packages work great:**
+- `requests`, `httpx` - HTTP libraries
+- `click`, `typer` - CLI frameworks
+- `pydantic` - Data validation
+- `beautifulsoup4`, `lxml` - HTML/XML parsing
+- `pillow` - Image processing (pure Python fallback)
+- All `asyncio` libraries (built-in support)
+
+⚠️ **C extension packages (numpy, pandas, scipy) may NOT work:**
+- Termux uses Android **Bionic libc** (not glibc)
+- PyPI wheels are built for standard Linux (**manylinux** - glibc-based)
+- Platform mismatch: `manylinux_aarch64` ≠ `android_aarch64`
+- These packages require building from source with Android NDK
+
+**Recommendation:** Stick to **pure Python packages** for best compatibility and reliability.
 
 ---
 
@@ -278,18 +295,20 @@ make install
 
 ## Compatibility
 
-### Known working packages
+### Package compatibility
 
-✅ **Tested and working:**
-- `requests`, `urllib3` - HTTP libraries
-- `numpy` - Numerical computing (with compatible wheels)
+✅ **Pure Python packages work perfectly:**
+- `requests`, `httpx`, `urllib3` - HTTP libraries
+- `click`, `typer` - CLI frameworks
+- `pydantic` - Data validation
+- `beautifulsoup4` - HTML parsing
 - `asyncio` - Async I/O (built-in)
-- `threading` - Multi-threading (built-in)
-- `concurrent.futures` - Thread/process pools
+- `threading`, `concurrent.futures` - Multi-threading (built-in)
 
-⚠️ **May require recompilation:**
-- C extension modules built for standard Python (with GIL)
-- Check [free-threading compatibility tracker](https://py-free-threading.github.io/)
+⚠️ **C extensions may NOT work (Bionic vs glibc):**
+- `numpy`, `pandas`, `scipy` - Scientific computing
+- Most PyPI wheels are for `manylinux` (glibc), not Android (Bionic)
+- Require building from source with Android NDK toolchain
 
 ### Performance expectations
 
@@ -297,7 +316,7 @@ make install
 **I/O-bound**: Similar to standard Python
 **Single-threaded**: ~5-10% slower (free-threading overhead)
 
-**Best for**: Parallel processing, concurrent tasks, multi-user servers
+**Best for**: Scripting, automation, web scraping, CLI tools, async I/O
 
 ---
 
