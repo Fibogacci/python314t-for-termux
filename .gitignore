@@ -1,0 +1,19 @@
+# Build artifacts
+*.pyc
+*.pyo
+__pycache__/
+*.so
+*.a
+
+# Extracted packages
+termux-python314t-*/
+
+# Temp files
+*.tmp
+*.log
+*.swp
+*~
+
+# OS
+.DS_Store
+Thumbs.db
