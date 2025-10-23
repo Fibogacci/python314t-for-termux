@@ -93,55 +93,71 @@ python3.14t -c "import sys; print(f'GIL enabled: {sys._is_gil_enabled()}')"
 
 ---
 
-## Package Management - Use uv (Required)
+## Verify SSL Support
 
-**⚠️ Important:** Standard `pip` does **NOT work** with this free-threading build due to ctypes library naming issues (`libpython3.14t.so` vs `libpython3.14.so`).
-
-**Use `uv` instead** - a fast Python package installer:
-
-### Install uv
+Python 3.14t includes **OpenSSL 3.3.2** for secure HTTPS connections:
 
 ```bash
-# Install from Termux repository
-pkg install uv
+python3.14t -c "import ssl; print(ssl.OPENSSL_VERSION)"
+# Output: OpenSSL 3.3.2 3 Sep 2024
+
+# Test HTTPS connection
+python3.14t -c "import urllib.request; print(urllib.request.urlopen('https://www.python.org').status)"
+# Output: 200
 ```
 
-### Create a project
+✅ SSL/TLS fully supported!
+
+---
+
+## Package Management - Use pip
+
+### Install pip
 
 ```bash
-# Initialize new project with Python 3.14t
-uv init my-project --python 3.14t
-cd my-project
+# Download pip installer
+wget https://bootstrap.pypa.io/get-pip.py
 
-# Add pure Python packages (recommended)
-uv add requests httpx click
+# Install pip for Python 3.14t
+python3.14t get-pip.py
 
-# Run Python
-uv run python --version
-# Output: Python 3.14.0 free-threading build
-
-# Run your scripts
-uv run python script.py
+# Verify installation
+pip --version
 ```
 
-### Why uv?
+### Install packages
 
-- ✅ Works with free-threading Python 3.14t (pip doesn't!)
-- ⚡ 10-100x faster than pip
-- 🔒 Reliable dependency resolution
-- 📦 Automatic virtual environment management
+```bash
+# Install pure Python packages
+pip install requests httpx click
 
-Learn more: https://github.com/astral-sh/uv
+# Test requests
+python3.14t -c "import requests; print(requests.get('https://httpbin.org/get').json())"
+```
 
-### Package Compatibility
+### Why not uv?
 
-✅ **Pure Python packages work great:**
-- `requests`, `httpx` - HTTP libraries
+**⚠️ Important:** `uv` package manager does **NOT work** on Android/Termux:
+
+```bash
+$ uv add requests
+error: Can't use Python at `/data/data/com.termux/files/home/.local/bin/python3.14t`
+Caused by: Unknown operating system: `android`
+```
+
+uv does not recognize Android as a supported platform. **Use pip instead.**
+
+---
+
+## Package Compatibility
+
+✅ **Pure Python packages work perfectly:**
+- `requests`, `httpx`, `urllib3` - HTTP libraries (HTTPS supported!)
 - `click`, `typer` - CLI frameworks
 - `pydantic` - Data validation
-- `beautifulsoup4`, `lxml` - HTML/XML parsing
-- `pillow` - Image processing (pure Python fallback)
-- All `asyncio` libraries (built-in support)
+- `beautifulsoup4` - HTML/XML parsing
+- `asyncio` - Async I/O (built-in)
+- `threading`, `concurrent.futures` - Multi-threading (built-in)
 
 ⚠️ **C extension packages (numpy, pandas, scipy) may NOT work:**
 - Termux uses Android **Bionic libc** (not glibc)
@@ -316,7 +332,7 @@ make install
 **I/O-bound**: Similar to standard Python
 **Single-threaded**: ~5-10% slower (free-threading overhead)
 
-**Best for**: Scripting, automation, web scraping, CLI tools, async I/O
+**Best for**: Scripting, automation, web scraping, CLI tools, async I/O, HTTPS requests
 
 ---
 
