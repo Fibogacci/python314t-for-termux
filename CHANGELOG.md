@@ -14,6 +14,15 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - README with installation and usage instructions
 - Benchmark example for testing multi-threading performance
 
+### Fixed (2025-10-24)
+- **install.sh:** Auto-configure ~/.bashrc with interactive prompt
+- **install.sh:** Force PREFIX to ~/.local to avoid system conflicts
+- **install.sh:** Only install python3.14t binary (no symlink overwrites)
+- **install.sh:** Check if PATH/LD_LIBRARY_PATH already configured
+- **README.md:** Simplified to essential installation steps
+- **README.md:** Added source ~/.bashrc reminder
+- **README.md:** Clearer verification instructions
+
 ### Technical Details
 - Architecture: ARM aarch64 (64-bit)
 - Platform: Android 7.0+ (API 24+)
@@ -36,6 +45,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Some C extensions may need recompilation for free-threading
 - GUI modules removed (`tkinter`, `idlelib`)
 - Test suite removed for size optimization
+
+### Testing
+- Tested on real Termux Android ARM64 device
+- Verified installation process
+- Confirmed free-threading works (GIL disabled)
+- Performance benchmarks validated
 
 ---
 
