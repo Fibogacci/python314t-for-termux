@@ -70,7 +70,13 @@ Add to your `~/.bashrc`:
 ```bash
 echo 'export PATH="$HOME/.local/bin:$PATH"' >> ~/.bashrc
 echo 'export LD_LIBRARY_PATH="$HOME/.local/lib:$LD_LIBRARY_PATH"' >> ~/.bashrc
+echo 'export SSL_CERT_FILE="/data/data/com.termux/files/usr/etc/tls/cert.pem"' >> ~/.bashrc
 source ~/.bashrc
+```
+
+**Note:** Make sure `ca-certificates` package is installed:
+```bash
+pkg install ca-certificates
 ```
 
 ### Step 4: Verify installation
@@ -104,6 +110,11 @@ python3.14t -c "import ssl; print(ssl.OPENSSL_VERSION)"
 # Test HTTPS connection
 python3.14t -c "import urllib.request; print(urllib.request.urlopen('https://www.python.org').status)"
 # Output: 200
+```
+
+**Note:** SSL certificates are configured to use Termux CA bundle. Ensure `ca-certificates` is installed:
+```bash
+pkg install ca-certificates
 ```
 
 ✅ SSL/TLS fully supported!
