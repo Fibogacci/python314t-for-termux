@@ -375,12 +375,12 @@ Cross-compiled for Termux ARM64 with optimization and size reduction.
 
 ---
 
-## Contributing
+## Author
 
-Issues, suggestions, and contributions welcome!
+**Fibogacci**
 
-- Report bugs: [GitHub Issues](https://github.com/fibogacci/python314t-for-termux/issues)
-- Discussions: [GitHub Discussions](https://github.com/fibogacci/python314t-for-termux/discussions)
+- Website: [Fibogacci.com](https://fibogacci.com)
+- Blog: [AndroidPython.com](https://androidpython.com) - Python on Android tutorials and resources
 
 ---
 
