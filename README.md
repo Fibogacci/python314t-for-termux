@@ -150,19 +150,33 @@ python3.14t -c "import requests; print(requests.get('https://httpbin.org/get').j
 
 ## Package Compatibility
 
-✅ **Pure Python packages work perfectly:**
-- `requests`, `httpx`, `urllib3` - HTTP libraries (HTTPS supported!)
-- `click`, `typer` - CLI frameworks
-- `pydantic` - Data validation
-- `beautifulsoup4` - HTML/XML parsing
-- `asyncio` - Async I/O (built-in)
-- `threading`, `concurrent.futures` - Multi-threading (built-in)
+### ✅ Tested and Working - Pure Python Packages
 
-⚠️ **C extension packages (numpy, pandas, scipy) may NOT work:**
-- Termux uses Android **Bionic libc** (not glibc)
+**HTTP/Web Libraries:**
+- `requests` ✅ - HTTP library (HTTPS works - uses bundled certifi)
+- `httpx` ✅ - Modern async HTTP client (HTTPS works - uses bundled certifi)
+- `urllib3` ✅ - HTTP library (requires SSL_CERT_FILE env var for HTTPS)
+- `beautifulsoup4` ✅ - HTML/XML parsing
+
+**CLI Frameworks:**
+- `click` ✅ - Command-line interface creation
+- `typer` ✅ - Modern CLI framework (based on click)
+
+**Built-in Modules:**
+- `asyncio` ✅ - Async I/O
+- `threading` ✅ - Multi-threading
+- `concurrent.futures` ✅ - High-level threading/processing
+
+### ❌ Known Issues
+
+**Packages with Rust dependencies:**
+- `pydantic` v2 ❌ - Requires Rust compilation (pydantic-core)
+
+**C extension packages (numpy, pandas, scipy):**
+- ⚠️ May NOT work - Termux uses Android **Bionic libc** (not glibc)
 - PyPI wheels are built for standard Linux (**manylinux** - glibc-based)
 - Platform mismatch: `manylinux_aarch64` ≠ `android_aarch64`
-- These packages require building from source with Android NDK
+- Require building from source with Android NDK
 
 **Recommendation:** Stick to **pure Python packages** for best compatibility and reliability.
 
