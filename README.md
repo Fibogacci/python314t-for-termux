@@ -146,18 +146,6 @@ pip install requests httpx click
 python3.14t -c "import requests; print(requests.get('https://httpbin.org/get').json())"
 ```
 
-### Why not uv?
-
-**⚠️ Important:** `uv` package manager does **NOT work** on Android/Termux:
-
-```bash
-$ uv add requests
-error: Can't use Python at `/data/data/com.termux/files/home/.local/bin/python3.14t`
-Caused by: Unknown operating system: `android`
-```
-
-uv does not recognize Android as a supported platform. **Use pip instead.**
-
 ---
 
 ## Package Compatibility
